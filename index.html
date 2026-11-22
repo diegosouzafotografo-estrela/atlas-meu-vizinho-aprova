@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Índice navegável dos 35 diagramas de arquitetura, dados, fluxos, dinheiro e projeto do Meu Vizinho Aprova.">
+  <title>Atlas visual — Meu Vizinho Aprova</title>
+  <style>
+    :root {
+      --bg: #f6f3ec;
+      --surface: #fffdf8;
+      --surface-2: #efe9dd;
+      --ink: #1f2a24;
+      --muted: #5d6b62;
+      --line: #d9d0bf;
+      --green: #1f6b4f;
+      --green-soft: #dcefe5;
+      --amber: #9a5b12;
+      --amber-soft: #f7e7c8;
+      --blue: #285b77;
+      --blue-soft: #dceaf1;
+      --rose: #8b3b4a;
+      --rose-soft: #f4dfe3;
+      --shadow: 0 1px 2px rgba(31, 42, 36, .06), 0 10px 30px rgba(31, 42, 36, .06);
+      --radius: 18px;
+      --max: 1180px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #121815;
+        --surface: #18211c;
+        --surface-2: #202b25;
+        --ink: #eef4ef;
+        --muted: #a7b6ac;
+        --line: #34423a;
+        --green: #7fd1ac;
+        --green-soft: #1d3a2d;
+        --amber: #f0bc72;
+        --amber-soft: #3a2c18;
+        --blue: #8cc7e3;
+        --blue-soft: #1b303b;
+        --rose: #efa9b5;
+        --rose-soft: #3a2228;
+        --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 16px 40px rgba(0, 0, 0, .22);
+      }
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(1100px 520px at 8% -8%, rgba(31, 107, 79, .12), transparent 60%),
+        radial-gradient(900px 500px at 100% 0%, rgba(154, 91, 18, .10), transparent 55%),
+        var(--bg);
+      color: var(--ink);
+      font: 16px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    .skip {
+      position: absolute; left: -999px; top: 12px; z-index: 20;
+      background: var(--ink); color: var(--bg); padding: 10px 14px; border-radius: 10px;
+    }
+    .skip:focus { left: 12px; }
+    .wrap { width: min(calc(100% - 32px), var(--max)); margin: 0 auto; }
+    header.hero { padding: 46px 0 26px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--green);
+    }
+    .eyebrow::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+    h1 {
+      margin: 12px 0 10px;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1.02;
+      letter-spacing: -.035em;
+      max-width: 820px;
+    }
+    .lede { max-width: 760px; margin: 0; color: var(--muted); font-size: 17px; }
+    .meta {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px;
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      border: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 82%, transparent);
+      border-radius: 999px; padding: 6px 10px; font-size: 12px; font-weight: 650; color: var(--muted);
+    }
+    .pill strong { color: var(--ink); }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .dot.green { color: var(--green); }
+    .dot.amber { color: var(--amber); }
+    .dot.blue { color: var(--blue); }
+
+    .toolbar {
+      position: sticky; top: 0; z-index: 10;
+      backdrop-filter: blur(14px);
+      background: color-mix(in srgb, var(--bg) 84%, transparent);
+      border-block: 1px solid var(--line);
+      padding: 12px 0;
+    }
+    .toolbar-inner { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+    .search {
+      flex: 1 1 320px; display: flex; align-items: center; gap: 10px;
+      background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+      padding: 10px 12px; box-shadow: var(--shadow);
+    }
+    .search svg { flex: none; opacity: .65; }
+    .search input {
+      width: 100%; border: 0; outline: 0; background: transparent; color: var(--ink);
+      font: inherit; font-size: 15px;
+    }
+    .search input::placeholder { color: var(--muted); }
+    .filters { display: flex; gap: 6px; flex-wrap: wrap; }
+    .filter {
+      border: 1px solid var(--line); background: var(--surface); color: var(--muted);
+      border-radius: 999px; padding: 8px 12px; font: inherit; font-size: 13px; font-weight: 650;
+      cursor: pointer;
+    }
+    .filter:hover { color: var(--ink); border-color: var(--muted); }
+    .filter[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .result-count { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+
+    main { padding: 34px 0 70px; }
+    section.group { margin-top: 38px; scroll-margin-top: 92px; }
+    section.group:first-of-type { margin-top: 8px; }
+    .group-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+    h2 { margin: 0; font-size: clamp(20px, 2.4vw, 28px); letter-spacing: -.02em; }
+    .group-head p { margin: 0; color: var(--muted); font-size: 14px; }
+    .group-count { color: var(--muted); font-size: 13px; margin-left: auto; }
+    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 12px; }
+    .card {
+      grid-column: span 4;
+      display: flex; flex-direction: column; gap: 8px;
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 16px 16px 14px; text-decoration: none; min-height: 150px;
+      box-shadow: var(--shadow);
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+    .card:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--green) 45%, var(--line)); }
+    .card:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
+    .card-top { display: flex; align-items: center; gap: 8px; }
+    .num {
+      font: 700 11px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: var(--muted); letter-spacing: .06em;
+    }
+    .tag {
+      display: inline-flex; align-items: center; border-radius: 999px; padding: 3px 8px;
+      font-size: 10.5px; font-weight: 750; letter-spacing: .04em; text-transform: uppercase;
+      background: var(--surface-2); color: var(--muted);
+    }
+    .tag.done { background: var(--green-soft); color: var(--green); }
+    .tag.plan { background: var(--amber-soft); color: var(--amber); }
+    .tag.info { background: var(--blue-soft); color: var(--blue); }
+    .card h3 { margin: 0; font-size: 16.5px; line-height: 1.25; letter-spacing: -.012em; }
+    .card p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.45; }
+    .card .go { margin-top: auto; padding-top: 6px; color: var(--green); font-size: 12.5px; font-weight: 700; }
+    .card .go::after { content: " →"; }
+    .empty {
+      display: none; padding: 34px; text-align: center; color: var(--muted);
+      border: 1px dashed var(--line); border-radius: var(--radius); background: var(--surface);
+    }
+    .empty.show { display: block; }
+
+    .how {
+      margin-top: 48px; padding: 22px 24px; border: 1px solid var(--line);
+      border-radius: var(--radius); background: color-mix(in srgb, var(--surface) 72%, transparent);
+    }
+    .how h2 { font-size: 20px; margin-bottom: 10px; }
+    .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .how-item { display: flex; gap: 10px; align-items: flex-start; }
+    .how-item strong { display: block; font-size: 13.5px; }
+    .how-item span { color: var(--muted); font-size: 12.5px; }
+    .swatch { width: 10px; height: 10px; border-radius: 50%; flex: none; margin-top: 5px; }
+    footer {
+      border-top: 1px solid var(--line); padding: 24px 0 44px; color: var(--muted); font-size: 13px;
+    }
+    footer .wrap { display: flex; gap: 14px; justify-content: space-between; flex-wrap: wrap; }
+    footer a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    .kbd {
+      font: 600 11px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px;
+      padding: 2px 5px; background: var(--surface);
+    }
+    @media (max-width: 900px) {
+      .card { grid-column: span 6; }
+      .how-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .card { grid-column: span 12; }
+      header.hero { padding-top: 30px; }
+      .toolbar { position: static; }
+      .group-count { margin-left: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .card { transition: none; }
+      .card:hover { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#conteudo">Pular para os diagramas</a>
+
+  <header class="hero wrap">
+    <span class="eyebrow">Atlas visual do sistema</span>
+    <h1>Meu Vizinho Aprova, de ponta a ponta.</h1>
+    <p class="lede">
+      Arquitetura, modelo de dados, fluxos, dinheiro, operação e projeto em
+      <strong>35 diagramas</strong> navegáveis. Cada página é standalone e foi
+      gerada pelo pipeline nativo do Archify.
+    </p>
+    <div class="meta" aria-label="Resumo do atlas">
+      <span class="pill"><span class="dot green"></span><strong>Fase 1</strong> entregue</span>
+      <span class="pill"><span class="dot amber"></span><strong>Fases 2–5</strong> planejadas</span>
+      <span class="pill"><span class="dot blue"></span>Congelado em <strong>f83b8d4</strong></span>
+      <span class="pill">34 páginas · 6 áreas</span>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="toolbar-inner wrap">
+      <label class="search" for="q">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"></circle>
+          <path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+        <input id="q" type="search" placeholder="Buscar por diagrama, tema ou fase…" autocomplete="off" aria-describedby="result-count">
+        <span class="kbd" aria-hidden="true">/</span>
+      </label>
+      <div class="filters" role="group" aria-label="Filtrar por área">
+        <button class="filter" type="button" data-filter="all" aria-pressed="true">Todos</button>
+        <button class="filter" type="button" data-filter="arquitetura" aria-pressed="false">Arquitetura</button>
+        <button class="filter" type="button" data-filter="dados" aria-pressed="false">Dados</button>
+        <button class="filter" type="button" data-filter="fluxos" aria-pressed="false">Fluxos</button>
+        <button class="filter" type="button" data-filter="pedido" aria-pressed="false">Pedido</button>
+        <button class="filter" type="button" data-filter="dinheiro" aria-pressed="false">Dinheiro</button>
+        <button class="filter" type="button" data-filter="projeto" aria-pressed="false">Projeto</button>
+      </div>
+      <span class="result-count" id="result-count" aria-live="polite">35 diagramas</span>
+    </div>
+  </div>
+
+  <main id="conteudo" class="wrap">
+    <section class="group" id="arquitetura" data-group="arquitetura">
+      <div class="group-head">
+        <h2>Arquitetura e isolamento</h2>
+        <p>Quem usa, o que roda e onde ficam as fronteiras de confiança.</p>
+        <span class="group-count">5 diagramas</span>
+      </div>
+      <div class="grid">
+        <a class="card" href="01-contexto.html" data-title="contexto sistema atores asaas resend push" data-tags="arquitetura entregue planejado">
+          <span class="card-top"><span class="num">01</span><span class="tag info">contexto</span><span class="tag done">fase 1</span></span>
+          <h3>Contexto do sistema</h3>
+          <p>Quem usa a MVA e quais serviços externos participam da jornada.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="02-containers.html" data-title="containers pwas next supabase netlify asaas resend" data-tags="arquitetura entregue planejado">
+          <span class="card-top"><span class="num">02</span><span class="tag info">containers</span><span class="tag done">fase 1</span></span>
+          <h3>Containers</h3>
+          <p>Quatro PWAs, backoffice, Next.js, Supabase e provedores externos.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="03-componentes-next.html" data-title="componentes next route groups server actions dominio email" data-tags="arquitetura entregue planejado">
+          <span class="card-top"><span class="num">03</span><span class="tag info">componentes</span><span class="tag done">fase 1</span></span>
+          <h3>Componentes do Next.js</h3>
+          <p>Route groups, server actions, domínio puro, Supabase e e-mail.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="04-implantacao.html" data-title="implantacao ambientes local producao netlify segredos webhook" data-tags="arquitetura entregue planejado">
+          <span class="card-top"><span class="num">04</span><span class="tag info">implantação</span><span class="tag plan">fases 4–5</span></span>
+          <h3>Implantação e ambientes</h3>
+          <p>O que roda hoje no local e o que é alvo de produção.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="05-tenancy-rls.html" data-title="tenancy rls isolamento tenant gc gp operador" data-tags="arquitetura entregue planejado">
+          <span class="card-top"><span class="num">05</span><span class="tag info">segurança</span><span class="tag done">fase 1</span></span>
+          <h3>Tenancy e RLS</h3>
+          <p>Os dois eixos de isolamento e a única barreira de dados.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="group" id="dados" data-group="dados">
+      <div class="group-head">
+        <h2>Dados e MER</h2>
+        <p>O modelo lógico, agregado por domínio, com chaves e relações.</p>
+        <span class="group-count">7 diagramas</span>
+      </div>
+      <div class="grid">
+        <a class="card" href="06-mapa-agregados.html" data-title="mapa agregados dominio entidades" data-tags="dados planejado">
+          <span class="card-top"><span class="num">06</span><span class="tag info">visão geral</span><span class="tag plan">fases 1–5</span></span>
+          <h3>Mapa de agregados</h3>
+          <p>Os grandes blocos do domínio e como eles se conectam.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="07-mer-identidade.html" data-title="mer identidade usuario membro convite promocao operador" data-tags="dados entregue planejado">
+          <span class="card-top"><span class="num">07</span><span class="tag info">MER</span><span class="tag done">fase 1</span></span>
+          <h3>Identidade e acesso</h3>
+          <p>Pessoa, membro, convite, promoção e operador da MVA.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="08-mer-grupos-vinculo.html" data-title="mer grupos vinculo gc gp documento status" data-tags="dados entregue">
+          <span class="card-top"><span class="num">08</span><span class="tag info">MER</span><span class="tag done">fase 1</span></span>
+          <h3>Grupos e vínculo</h3>
+          <p>Grupo de consumidores, grupo de prestadores e o vínculo entre eles.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="09-mer-catalogo-agenda.html" data-title="mer catalogo agenda servico habilitacao blocos excecoes" data-tags="dados planejado">
+          <span class="card-top"><span class="num">09</span><span class="tag info">MER</span><span class="tag plan">fase 2</span></span>
+          <h3>Catálogo e agenda</h3>
+          <p>Serviço, comissão, habilitação, blocos e exceções.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="10-mer-pedido.html" data-title="mer pedido orcamento remarcacao snapshot" data-tags="dados planejado">
+          <span class="card-top"><span class="num">10</span><span class="tag info">MER</span><span class="tag plan">fase 3</span></span>
+          <h3>Pedido e orçamento</h3>
+          <p>O snapshot do preço, o orçamento e a remarcação.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="11-mer-dinheiro.html" data-title="mer dinheiro titular conta pagamento repasse kyc" data-tags="dados planejado">
+          <span class="card-top"><span class="num">11</span><span class="tag info">MER</span><span class="tag plan">fase 4</span></span>
+          <h3>Dinheiro</h3>
+          <p>Titular, conta, pagamento, repasse e KYC.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="12-mer-posvenda-plataforma.html" data-title="mer pos venda avaliacao disputa notificacao auditoria" data-tags="dados planejado">
+          <span class="card-top"><span class="num">12</span><span class="tag info">MER</span><span class="tag plan">fase 5</span></span>
+          <h3>Pós-venda e plataforma</h3>
+          <p>Avaliação, disputa, notificação, push e auditoria.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="group" id="fluxos" data-group="fluxos">
+      <div class="group-head">
+        <h2>Entrada e oferta</h2>
+        <p>Como pessoas entram, como a oferta nasce e como a agenda fica disponível.</p>
+        <span class="group-count">6 diagramas</span>
+      </div>
+      <div class="grid">
+        <a class="card" href="13-ciclo-cliente.html" data-title="ciclo cliente entrada aprovacao revogacao reentrada" data-tags="fluxos entregue">
+          <span class="card-top"><span class="num">13</span><span class="tag info">lifecycle</span><span class="tag done">fase 1</span></span>
+          <h3>Ciclo do cliente</h3>
+          <p>Entrada, aprovação, recusa, revogação e reentrada.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="14-ciclo-vinculo.html" data-title="ciclo vinculo solicitado ativo suspenso cancelado expirado" data-tags="fluxos entregue">
+          <span class="card-top"><span class="num">14</span><span class="tag info">lifecycle</span><span class="tag done">fase 1</span></span>
+          <h3>Ciclo do vínculo</h3>
+          <p>Como o vínculo nasce, é suspenso, reativado e encerrado.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="15-profissional-papeis.html" data-title="profissional papeis convite aceite promocao conflito ultimo admin" data-tags="fluxos entregue">
+          <span class="card-top"><span class="num">15</span><span class="tag info">workflow</span><span class="tag done">fase 1</span></span>
+          <h3>Profissional e papéis</h3>
+          <p>Convite, inclusão, promoção e o conflito responsável × curador.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="16-oferta-catalogo-habilitacao.html" data-title="oferta catalogo comissao habilitacao recusa remocao" data-tags="fluxos planejado">
+          <span class="card-top"><span class="num">16</span><span class="tag info">workflow</span><span class="tag plan">fase 2</span></span>
+          <h3>Catálogo e habilitação</h3>
+          <p>Serviço, comissão, definição, recusa e reativação da habilitação.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="17-agenda-profissional.html" data-title="agenda blocos semanais excecoes previa leitura" data-tags="fluxos planejado">
+          <span class="card-top"><span class="num">17</span><span class="tag info">workflow</span><span class="tag plan">fase 2</span></span>
+          <h3>Agenda do profissional</h3>
+          <p>Blocos semanais, exceções, prévia e leitura pelo responsável.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="18-disponibilidade-reserva.html" data-title="disponibilidade reserva grade 15 minutos sobreposicao" data-tags="fluxos planejado">
+          <span class="card-top"><span class="num">18</span><span class="tag info">sequência</span><span class="tag plan">fase 3</span></span>
+          <h3>Disponibilidade e reserva</h3>
+          <p>Da consulta de horários à reserva sem duplicar o profissional.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="group" id="pedido" data-group="pedido">
+      <div class="group-head">
+        <h2>Pedido</h2>
+        <p>Preço, orçamento, confirmação, remarcação e todos os estados.</p>
+        <span class="group-count">7 diagramas</span>
+      </div>
+      <div class="grid">
+        <a class="card" href="19-pedido-preco-definido.html" data-title="pedido preco definido confirmacao pagamento" data-tags="pedido planejado">
+          <span class="card-top"><span class="num">19</span><span class="tag info">sequência</span><span class="tag plan">fases 3–4</span></span>
+          <h3>Pedido com preço definido</h3>
+          <p>Da escolha do serviço à confirmação e ao pagamento.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="20-pedido-orcamento.html" data-title="pedido orcamento descricao resposta aceite agendamento" data-tags="pedido planejado">
+          <span class="card-top"><span class="num">20</span><span class="tag info">sequência</span><span class="tag plan">fase 3</span></span>
+          <h3>Pedido sob orçamento</h3>
+          <p>Descrição, resposta do responsável, aceite e agendamento.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="21-remarcacao.html" data-title="remarcacao novo horario original reservado confirmacao" data-tags="pedido planejado">
+          <span class="card-top"><span class="num">21</span><span class="tag info">sequência</span><span class="tag plan">fase 3</span></span>
+          <h3>Remarcação</h3>
+          <p>O cliente pede, o profissional confirma e o original fica reservado.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="22-cancelamento-no-show.html" data-title="cancelamento no show estorno penalidade 30% contador" data-tags="pedido planejado">
+          <span class="card-top"><span class="num">22</span><span class="tag info">workflow</span><span class="tag plan">fases 3–4</span></span>
+          <h3>Cancelamento e efeitos</h3>
+          <p>Estorno integral, 30% de P e o contador 3/90 e 6/90.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="23-ciclo-pedido-ate-pagamento.html" data-title="ciclo pedido pre pagamento orcamento agendamento solicitado" data-tags="pedido planejado">
+          <span class="card-top"><span class="num">23</span><span class="tag info">lifecycle</span><span class="tag plan">fase 3</span></span>
+          <h3>Pedido até o pagamento</h3>
+          <p>Orçamento, agendamento, confirmação e aguardando pagamento.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="23b-ciclo-pedido-pos-pagamento.html" data-title="ciclo pedido pos pagamento execucao conclusao liberacao disputa" data-tags="pedido planejado">
+          <span class="card-top"><span class="num">23b</span><span class="tag info">lifecycle</span><span class="tag plan">fases 4–5</span></span>
+          <h3>Pedido pós-pagamento</h3>
+          <p>Execução, conclusão, liberação, no-show e disputa.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="24-relogios-prazos.html" data-title="prazos relogios 24h 48h 30 minutos 3 dias 90 dias" data-tags="pedido ilustrativo">
+          <span class="card-top"><span class="num">24</span><span class="tag info">timeline</span><span class="tag plan">ilustrativo</span></span>
+          <h3>Relógios e prazos</h3>
+          <p>Quem vence quando, em um cenário explicitamente ilustrativo.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="group" id="dinheiro" data-group="dinheiro">
+      <div class="group-head">
+        <h2>Dinheiro e operação</h2>
+        <p>Fórmula, cobrança, ledger, disputa, avaliação e backoffice.</p>
+        <span class="group-count">7 diagramas</span>
+      </div>
+      <div class="grid">
+        <a class="card" href="25-calculo-dinheiro.html" data-title="calculo dinheiro P c B A M custo total snapshot" data-tags="dinheiro planejado">
+          <span class="card-top"><span class="num">25</span><span class="tag info">dataflow</span><span class="tag plan">fases 3–4</span></span>
+          <h3>Cálculo do dinheiro</h3>
+          <p>P, c, B, A, M, custo do meio e total, com o snapshot do pedido.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="26-pagamento.html" data-title="pagamento pix cartao webhook idempotente asaas" data-tags="dinheiro planejado">
+          <span class="card-top"><span class="num">26</span><span class="tag info">sequência</span><span class="tag plan">fase 4</span></span>
+          <h3>Pagamento</h3>
+          <p>Pix, cartão, checkout hospedado e webhook idempotente.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="27-ledger-repasses.html" data-title="ledger repasses estorno chargeback quatro destinos" data-tags="dinheiro planejado">
+          <span class="card-top"><span class="num">27</span><span class="tag info">dataflow</span><span class="tag plan">fase 4</span></span>
+          <h3>Ledger de repasses</h3>
+          <p>Os quatro destinos, o custo do meio e as linhas de reversão.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="28-disputa-assistida.html" data-title="disputa assistida liberar estornar reter 30% MVA" data-tags="dinheiro planejado">
+          <span class="card-top"><span class="num">28</span><span class="tag info">lifecycle</span><span class="tag plan">fase 5</span></span>
+          <h3>Disputa assistida</h3>
+          <p>Aberta, em análise e a decisão da MVA em até 7 dias.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="29-avaliacao.html" data-title="avaliacao nota resposta moderacao media bayesiana" data-tags="dinheiro planejado">
+          <span class="card-top"><span class="num">29</span><span class="tag info">workflow</span><span class="tag plan">fase 5</span></span>
+          <h3>Avaliação</h3>
+          <p>Dois alvos, uma resposta, moderação e média bayesiana.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="30-notificacoes.html" data-title="notificacoes in app email push outbox fallback" data-tags="dinheiro planejado">
+          <span class="card-top"><span class="num">30</span><span class="tag info">dataflow</span><span class="tag plan">fases 1–5</span></span>
+          <h3>Notificações</h3>
+          <p>Evento, outbox e os canais in-app, e-mail e push.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="31-backoffice.html" data-title="backoffice operacao conciliacao metricas auditoria" data-tags="dinheiro planejado">
+          <span class="card-top"><span class="num">31</span><span class="tag info">arquitetura</span><span class="tag plan">fase 5</span></span>
+          <h3>Backoffice</h3>
+          <p>Operação, titulares, disputas, métricas, conciliação e auditoria.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="group" id="projeto" data-group="projeto">
+      <div class="group-head">
+        <h2>Projeto</h2>
+        <p>O que já foi entregue, o que está especificado e qual é o próximo passo.</p>
+        <span class="group-count">3 diagramas</span>
+      </div>
+      <div class="grid">
+        <a class="card" href="32-eap-entrega.html" data-title="eap entrega fases work packages issues" data-tags="projeto entregue planejado">
+          <span class="card-top"><span class="num">32</span><span class="tag info">EAP</span><span class="tag done">fase 1</span><span class="tag plan">fases 2–5</span></span>
+          <h3>EAP de entrega</h3>
+          <p>Fases, work packages e as issues reais de cada fatia.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="33-roadmap-fases.html" data-title="roadmap linha do tempo fases portao asaas" data-tags="projeto entregue planejado">
+          <span class="card-top"><span class="num">33</span><span class="tag info">timeline</span><span class="tag done">histórico</span><span class="tag plan">próximo</span></span>
+          <h3>Roadmap e linha do tempo</h3>
+          <p>O histórico real do spec e das fases, sem datas inventadas.</p>
+          <span class="go">Abrir diagrama</span>
+        </a>
+        <a class="card" href="34-acompanhamento.html" data-title="acompanhamento estado issues fases fronteira bloqueios" data-tags="projeto acompanhamento issues spec">
+          <span class="card-top"><span class="num">34</span><span class="tag info">explainer</span><span class="tag done">fases 1–2</span><span class="tag plan">fases 3–5</span></span>
+          <h3>Acompanhamento do projeto</h3>
+          <p>Quantas fatias cada fase fechou, o que pode começar e onde está travado.</p>
+          <span class="go">Abrir painel</span>
+        </a>
+      </div>
+    </section>
+
+    <div class="empty" id="empty">Nenhum diagrama encontrado. Tente outro termo ou remova o filtro.</div>
+
+    <section class="how" aria-labelledby="how-title">
+      <h2 id="how-title">Como ler o atlas</h2>
+      <div class="how-grid">
+        <div class="how-item"><span class="swatch" style="background: var(--green)"></span><div><strong>Entregue</strong><span>Existe no código e nas migrations da fase 1.</span></div></div>
+        <div class="how-item"><span class="swatch" style="background: var(--amber)"></span><div><strong>Planejado</strong><span>Está no spec da fase, ainda sem implementação.</span></div></div>
+        <div class="how-item"><span class="swatch" style="background: var(--blue)"></span><div><strong>Contexto</strong><span>Aparece só para fechar uma FK; não é o foco do MER.</span></div></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>Meu Vizinho Aprova · atlas congelado em <code>f83b8d4</code> · conteúdo em português</span>
+      <span>
+        <a href="README.md">Índice em texto</a> ·
+        Spec ·
+        <a href="https://github.com/TalesPV/meuvizinhoaprova/issues/92">Issue #92</a>
+      </span>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const cards = [...document.querySelectorAll('.card')];
+      const groups = [...document.querySelectorAll('.group')];
+      const buttons = [...document.querySelectorAll('.filter')];
+      const input = document.getElementById('q');
+      const count = document.getElementById('result-count');
+      const empty = document.getElementById('empty');
+      let active = 'all';
+
+      const normalize = (value) => value
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+
+      const apply = () => {
+        const term = normalize(input.value.trim());
+        let visible = 0;
+        cards.forEach((card) => {
+          const haystack = normalize(`${card.dataset.title} ${card.dataset.tags} ${card.textContent}`);
+          const matchesTerm = !term || haystack.includes(term);
+          const matchesGroup = active === 'all' || card.closest('.group').dataset.group === active;
+          const show = matchesTerm && matchesGroup;
+          card.hidden = !show;
+          if (show) visible += 1;
+        });
+        groups.forEach((group) => {
+          const groupCards = [...group.querySelectorAll('.card')];
+          group.hidden = groupCards.every((card) => card.hidden);
+        });
+        count.textContent = `${visible} ${visible === 1 ? 'diagrama' : 'diagramas'}`;
+        empty.classList.toggle('show', visible === 0);
+      };
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          active = button.dataset.filter;
+          buttons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+          apply();
+        });
+      });
+
+      input.addEventListener('input', apply);
+      document.addEventListener('keydown', (event) => {
+        if (event.key === '/' && document.activeElement !== input) {
+          event.preventDefault();
+          input.focus();
+        }
+        if (event.key === 'Escape' && document.activeElement === input) {
+          input.value = '';
+          input.blur();
+          apply();
+        }
+      });
+      apply();
+    })();
+  </script>
+</body>
+</html>
